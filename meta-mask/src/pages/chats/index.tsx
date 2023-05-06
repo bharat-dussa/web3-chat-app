@@ -1,46 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import {
-  Avatar,
-  Button,
-  Col,
-  Input,
-  Layout,
-  Menu,
-  MenuProps,
-  Row,
-  theme,
-} from "antd";
-import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
-  TeamOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import { LeftBubble, RightBubble } from "../../elements/chat-bubble.element";
-import { useAuthStore } from "../../store/use-api";
+import { Avatar, Button, Input, Layout, Menu, MenuProps, theme } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { RightBubble } from "../../elements/chat-bubble.element";
 import { useAppStore } from "../../store/app-store";
 import AddUserModal from "../../components/add-user-modal/add-user-modal.component";
+import { useRouter } from "next/router";
+import { ROUTES } from "../../utils/api.util";
+
+const { Header, Content, Sider } = Layout;
 
 export const BottomBar = () => {
   const { sendMessages, getUserDetails, getReceiverAddress } = useAppStore();
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   const handleSubmit = () => {
     const user = getUserDetails();
 
     const receiverAddress = getReceiverAddress();
-    
+
     sendMessages(user._id, user.address, receiverAddress, message);
+
+    setMessage("");
+    router.reload(); // webscoket is not implemented so it's need to be reload
   };
 
   return (
     <div className="flex mt-4 gap-4">
-      <Input placeholder="Type something..." onChange={(e) => setMessage(e.target.value)}/>
+      <Input
+        placeholder="Type something..."
+        onChange={(e) => setMessage(e.target.value)}
+      />
       <Button onClick={handleSubmit}>Send</Button>
     </div>
   );
@@ -51,14 +42,19 @@ const index = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const { getUserDetails, getReceiverAddress, getOnetoOneMessages } =
-    useAppStore();
+  const {
+    getUserDetails,
+    getReceiverAddress,
+    getOnetoOneMessages,
+    isAuthenticated,
+  } = useAppStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messages, setMessages] = useState([]);
-  console.log("messages:", messages);
-
+  const router = useRouter();
   const user = getUserDetails();
+  const { handleLogout } = useAppStore();
+  const receiverAddress = getReceiverAddress();
 
   const handleNewChat = () => {
     setIsModalOpen(true);
@@ -68,12 +64,8 @@ const index = () => {
     setIsModalOpen(false);
   };
 
-  const receiverAddress = getReceiverAddress();
-
-  const { Header, Content, Footer, Sider } = Layout;
-
   const items: MenuProps["items"] = [UserOutlined].map((icon, index) => ({
-    key: String(index + 1),
+    key: String(getReceiverAddress()),
     icon: React.createElement(Avatar),
     label: getReceiverAddress(),
   }));
@@ -85,6 +77,12 @@ const index = () => {
     );
     setMessages(res);
   };
+
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     router.push(ROUTES.HOME);
+  //   }
+  // }, [r]);
 
   return (
     <Layout hasSider>
@@ -103,21 +101,30 @@ const index = () => {
             style={{
               height: 32,
               margin: 16,
-              background: "rgba(255, 255, 255, 0.2)",
             }}
-          />
-          <Button className="text-white" onClick={handleNewChat}>
-            Add new chat
-          </Button>
+            className="text-white"
+          >
+            Meta Chat
+          </div>
+          <div className="flex flex-col gap-4 m-4">
+            <Button className="text-white" onClick={handleNewChat}>
+              Add new chat
+            </Button>
+            <Button className="text-white" onClick={handleLogout}>
+              Logout
+            </Button>
+          </div>
         </div>
         <AddUserModal
           isModalOpen={isModalOpen}
           handleModalCancel={handleModalCancel}
+          handleModalOpen={(value) => setIsModalOpen(value)}
         />
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["4"]}
+          selectedKeys={[String(getReceiverAddress())]}
           items={items}
           onClick={handleMenuItemClick}
         />

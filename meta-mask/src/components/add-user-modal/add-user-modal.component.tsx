@@ -5,16 +5,22 @@ import { useAppStore } from "../../store/app-store";
 type IAddUserModal = {
   isModalOpen: boolean;
   handleModalCancel: () => void;
+  handleModalOpen: (value: boolean) => void;
 };
-const AddUserModal = ({ isModalOpen, handleModalCancel }: IAddUserModal) => {
+const AddUserModal = ({
+  isModalOpen,
+  handleModalCancel,
+  handleModalOpen,
+}: IAddUserModal) => {
   const [address, setAddress] = useState("");
 
   const { handleReceiverAddress } = useAppStore();
 
   const handleOk = () => {
     handleReceiverAddress(address);
+    setAddress("");
+    handleModalOpen(false);
   };
-
 
   return (
     <Modal

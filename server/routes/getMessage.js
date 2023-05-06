@@ -12,10 +12,10 @@ router.get("/get-message/:channelRef", async (req, res) => {
         $match: {
           $or: [
             {
-              channelRef: channelRef,
+              channelRef: channelRef.toLowerCase(),
             },
             {
-              channelRef2: channelRef,
+              channelRef2: channelRef.toLowerCase(),
             },
           ],
         },

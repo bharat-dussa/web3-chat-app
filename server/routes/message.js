@@ -8,8 +8,8 @@ const router = express.Router();
 router.post("/send-message", async (req, res) => {
   const { userId, senderAddress, receiverAddress, message } = req.body;
   try {
-    let channelRef = `${senderAddress}-${receiverAddress}-channel`;
-    let channelRef2 = `${receiverAddress}-${senderAddress}-channel`;
+    let channelRef = `${senderAddress.toLowerCase()}-${receiverAddress.toLowerCase()}-channel`;
+    let channelRef2 = `${receiverAddress.toLowerCase()}-${senderAddress.toLowerCase()}-channel`;
 
     let channelDetails = await Channel.aggregate([
       {

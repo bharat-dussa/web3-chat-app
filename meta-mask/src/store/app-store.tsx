@@ -29,6 +29,7 @@ const initialState = {
   getOnetoOneMessages: (address: string, receiverAddress: string) => {},
   handleReceiverAddress: (address: string) => {},
   getReceiverAddress: () => {},
+  isAuthenticated: false,
 };
 
 const { ethereum } =
@@ -43,7 +44,10 @@ export const useAppStore = () => useContext(AppContext);
 const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const [account, setAccount] = useState("");
   const [error, setError] = useState("");
-  const [cookie, setCookie] = useCookies(["token"]);
+
+  const [senderAddress, setSenderAddress] = useState("");
+  const [receiverAddress, setReceiverAddress] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const router = useRouter();
 
@@ -79,11 +83,11 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
             const res = await postApiData("login", payload);
             localStorage.setItem("user", JSON.stringify(res.user));
             setAccount(accounts[0]);
-            setCookie("token", accounts[0], {
-              path: "/",
-              maxAge: 1800, // Expires after 1hr
-              sameSite: true,
-            });
+            console.log('accounts[0]:', accounts[0]);
+
+            setToken(accounts[0]);
+
+            setIsAuthenticated(true);
             router.push(ROUTES.CHATS);
           } catch (error) {
             setError(error?.message);
@@ -140,6 +144,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const handleLogout = async () => {
     try {
       Cookies.remove("token", { path: "/" });
+      router.replace(ROUTES.HOME);
     } catch (err) {
       console.log("err:", err);
     }
@@ -171,6 +176,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
       getOnetoOneMessages,
       handleReceiverAddress,
       getReceiverAddress,
+      isAuthenticated,
     }),
     []
   );
@@ -187,17 +193,12 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
       const res = await postApiData("login", payload);
       localStorage.setItem("user", JSON.stringify(res.user));
       setAccount(accounts[0]);
-      setCookie("token", accounts[0], {
-        path: "/",
-        maxAge: 1800,
-        sameSite: true,
-      });
+
+      setToken(accounts[0]);
+
+      router.reload();
     });
   }, []);
-
-  useEffect(() => {
-    setToken(data?.address);
-  }, [data]);
 
   return (
     <AppContext.Provider value={storeContext}>{children}</AppContext.Provider>
