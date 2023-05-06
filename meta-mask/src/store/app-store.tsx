@@ -144,6 +144,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const handleLogout = async () => {
     try {
       Cookies.remove("token", { path: "/" });
+      localStorage.removeItem('receiverAddress')
       router.replace(ROUTES.HOME);
     } catch (err) {
       console.log("err:", err);

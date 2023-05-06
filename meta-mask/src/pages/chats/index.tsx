@@ -6,7 +6,6 @@ import { RightBubble } from "../../elements/chat-bubble.element";
 import { useAppStore } from "../../store/app-store";
 import AddUserModal from "../../components/add-user-modal/add-user-modal.component";
 import { useRouter } from "next/router";
-import { ROUTES } from "../../utils/api.util";
 
 const { Header, Content, Sider } = Layout;
 
