@@ -11,7 +11,6 @@ import {
 import { useApiStore, useAuthStore } from "./use-api";
 import { useRouter } from "next/router";
 import { ROUTES } from "../utils/api.util";
-import { useCookies } from "react-cookie";
 import Cookies from "js-cookie";
 
 const initialState = {
@@ -44,14 +43,11 @@ export const useAppStore = () => useContext(AppContext);
 const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const [account, setAccount] = useState("");
   const [error, setError] = useState("");
-
-  const [senderAddress, setSenderAddress] = useState("");
-  const [receiverAddress, setReceiverAddress] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const router = useRouter();
 
-  const { postApiData, data, fetchApiData } = useApiStore();
+  const { postApiData, fetchApiData } = useApiStore();
 
   const { setToken } = useAuthStore();
 
@@ -83,7 +79,6 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
             const res = await postApiData("login", payload);
             localStorage.setItem("user", JSON.stringify(res.user));
             setAccount(accounts[0]);
-            console.log('accounts[0]:', accounts[0]);
 
             setToken(accounts[0]);
 
@@ -133,7 +128,6 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
       const response = await fetchApiData(
         `get-message/${address}-${receiverAddress}-channel`
       );
-      console.log("response:", response);
 
       return response?.messages;
     } catch (err) {
@@ -144,7 +138,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const handleLogout = async () => {
     try {
       Cookies.remove("token", { path: "/" });
-      localStorage.removeItem('receiverAddress')
+      localStorage.removeItem("receiverAddress");
       router.replace(ROUTES.HOME);
     } catch (err) {
       console.log("err:", err);
@@ -184,7 +178,6 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     window?.ethereum.on("accountsChanged", async function (accounts) {
-      console.log("accounts:", accounts);
       // Time to reload your interface with accounts[0]!
       const payload = {
         username: "",
