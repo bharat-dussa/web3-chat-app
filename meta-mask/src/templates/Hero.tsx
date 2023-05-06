@@ -1,10 +1,10 @@
 import Link from "next/link";
 
-import { Background } from "../background/Background";
-import { Button } from "../button/Button";
-import { HeroOneButton } from "../hero/HeroOneButton";
+import { Background } from "../components/background/Background";
+import { Button } from "../elements/button/Button";
+import { HeroOneButton } from "../components/hero/HeroOneButton";
 import { Section } from "../layout/Section";
-import { NavbarTwoColumns } from "../navigation/NavbarTwoColumns";
+import { NavbarTwoColumns } from "../components/navigation/NavbarTwoColumns";
 import { Logo } from "./Logo";
 import { useRouter } from "next/router";
 import { ROUTES } from "../utils/api.util";

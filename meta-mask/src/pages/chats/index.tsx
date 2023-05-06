@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Avatar, Button, Input, Layout, Menu, MenuProps, theme } from "antd";
 import { UserOutlined } from "@ant-design/icons";
