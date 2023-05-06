@@ -12,6 +12,7 @@ import { useApiStore, useAuthStore } from "./use-api";
 import { useRouter } from "next/router";
 import { ROUTES } from "../utils/api.util";
 import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 
 const initialState = {
   account: "",
@@ -138,7 +139,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
 
   const handleLogout = async () => {
     try {
-      await auth.signOut();
+      Cookies.remove("token", { path: "/" });
     } catch (err) {
       console.log("err:", err);
     }
