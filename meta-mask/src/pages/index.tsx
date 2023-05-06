@@ -1,7 +1,11 @@
 import { Base } from "../templates/Base";
 
 const Index = () => {
-  return <Base />;
+  return (
+    <>
+      <Base />
+    </>
+  );
 };
 
 export default Index;

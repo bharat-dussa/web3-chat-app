@@ -1,40 +1,12 @@
 import React, { useState } from "react";
-
-import { Avatar, Button, Input, Layout, Menu, MenuProps, theme } from "antd";
+import { Avatar, Button, Layout, Menu, MenuProps, theme } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { RightBubble } from "../../elements/chat-bubble.element";
 import { useAppStore } from "../../store/app-store";
 import AddUserModal from "../../components/add-user-modal/add-user-modal.component";
-import { useRouter } from "next/router";
+import { BottomBar } from "../../components/bottom-bar/bottom-bar.component";
 
 const { Header, Content, Sider } = Layout;
-
-export const BottomBar = () => {
-  const { sendMessages, getUserDetails, getReceiverAddress } = useAppStore();
-  const [message, setMessage] = useState("");
-  const router = useRouter();
-
-  const handleSubmit = () => {
-    const user = getUserDetails();
-
-    const receiverAddress = getReceiverAddress();
-
-    sendMessages(user._id, user.address, receiverAddress, message);
-
-    setMessage("");
-    router.reload(); // webscoket is not implemented so it's need to be reload
-  };
-
-  return (
-    <div className="flex mt-4 gap-4">
-      <Input
-        placeholder="Type something..."
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <Button onClick={handleSubmit}>Send</Button>
-    </div>
-  );
-};
 
 const index = () => {
   const {
@@ -45,12 +17,10 @@ const index = () => {
     getUserDetails,
     getReceiverAddress,
     getOnetoOneMessages,
-    isAuthenticated,
   } = useAppStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messages, setMessages] = useState([]);
-  const router = useRouter();
   const user = getUserDetails();
   const { handleLogout } = useAppStore();
   const receiverAddress = getReceiverAddress();

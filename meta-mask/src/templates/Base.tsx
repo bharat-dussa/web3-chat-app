@@ -1,9 +1,8 @@
-import { Meta } from '../layout/Meta';
-import { AppConfig } from '../utils/AppConfig';
-import { Banner } from './Banner';
-import { Footer } from '../components/footer/Footer';
-import { Hero } from './Hero';
-import { VerticalFeatures } from './VerticalFeatures';
+import { Meta } from "../layout/Meta";
+import { AppConfig } from "../utils/app-config";
+import { Banner } from "./Banner";
+import { Hero } from "./Hero";
+import { VerticalFeatures } from "./VerticalFeatures";
 
 const Base = () => (
   <div className="antialiased text-gray-600">
@@ -11,7 +10,6 @@ const Base = () => (
     <Hero />
     <VerticalFeatures />
     <Banner />
-    <Footer />
   </div>
 );
 

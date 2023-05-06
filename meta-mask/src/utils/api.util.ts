@@ -7,5 +7,6 @@ export const API_URI = {
 export const ROUTES = {
     AUTH: "/sign-up",
     CHATS: "/chats",
-    HOME: "/"
+    HOME: "/",
+    ABOUT_US: '/about-us'
 }
