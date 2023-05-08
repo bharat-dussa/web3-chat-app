@@ -12,6 +12,7 @@ import { useApiStore, useAuthStore } from "./use-api";
 import { useRouter } from "next/router";
 import { ROUTES } from "../utils/api.util";
 import Cookies from "js-cookie";
+import useWebSocket from "react-use-websocket";
 
 const initialState = {
   account: "",
@@ -40,6 +41,8 @@ export const AppContext = createContext(initialState);
 
 export const useAppStore = () => useContext(AppContext);
 
+
+
 const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const [account, setAccount] = useState("");
   const [error, setError] = useState("");
@@ -50,6 +53,29 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const { postApiData, fetchApiData } = useApiStore();
 
   const { setToken } = useAuthStore();
+
+  const checkTokenExpired = () => {
+    const token = Cookies.get("token");
+    if (!token) {
+      // token not found, log out user
+      // logout();
+      return;
+    }
+  
+    const expires = new Date(token.expires);
+    console.log('expires:', expires);
+    if (expires < new Date()) {
+      // token has expired, clear cookie and log out user
+      Cookies.remove("token");
+      // logout();
+    }
+  };
+  checkTokenExpired()
+  useWebSocket("ws://127.0.0.1:3002", {
+    onOpen: () => {
+      console.log("WebSocket connection established.");
+    },
+  });
 
   const checkEtherumExists = () => {
     if (!ethereum) {
@@ -193,6 +219,17 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
       router.reload();
     });
   }, []);
+
+  useEffect(() => {
+    const isTokenPresent = Cookies.get('token');
+    console.log('isTokenPresent:', isTokenPresent);
+    console.log('router.pathname:', router.pathname);
+
+    if(!isTokenPresent && router.pathname === "/chats") {
+      router.push("/sign-up/")
+    }
+
+  })
 
   return (
     <AppContext.Provider value={storeContext}>{children}</AppContext.Provider>
