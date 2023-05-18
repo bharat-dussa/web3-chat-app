@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { ROUTES } from "../utils/api.util";
 import Cookies from "js-cookie";
 import { IInitialState, IUser } from "../utils/app.interface";
+import { toast } from "react-hot-toast";
 
 const initialState: IInitialState = {
   account: "",
@@ -81,6 +82,8 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const checkEtherumExists = () => {
     if (!ethereum) {
       setError("Please install metamask");
+
+      toast("Please install metamask");
 
       return false;
     }
@@ -204,7 +207,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   );
 
   useEffect(() => {
-    window?.ethereum.on("accountsChanged", async function (accounts) {
+    window?.ethereum?.on("accountsChanged", async function (accounts) {
       // Time to reload your interface with accounts[0]!
       const payload = {
         username: "",
