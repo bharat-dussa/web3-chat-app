@@ -5,12 +5,12 @@ import { RightBubble } from "../../elements/chat-bubble.element";
 import { useAppStore } from "../../store/app-store";
 import AddUserModal from "../../components/add-user-modal/add-user-modal.component";
 import { BottomBar } from "../../components/bottom-bar/bottom-bar.component";
+import { IMessage, IUser } from "../../utils/app.interface";
 
 const { Header, Content, Sider } = Layout;
 
 const index = () => {
-  const [user, setUser] = useState();
-  console.log('user:', user);
+  const [user, setUser] = useState<IUser>();
 
   const {
     token: { colorBgContainer },
@@ -20,7 +20,7 @@ const index = () => {
     useAppStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const { handleLogout } = useAppStore();
   const receiverAddress = getReceiverAddress();
 
@@ -32,18 +32,21 @@ const index = () => {
     setIsModalOpen(false);
   };
 
-  const items: MenuProps["items"] = [UserOutlined].map((icon, index) => ({
+  const items: MenuProps["items"] = [UserOutlined].map(() => ({
     key: String(getReceiverAddress()),
     icon: React.createElement(Avatar),
     label: getReceiverAddress(),
   }));
 
-  const handleMenuItemClick = async (item) => {
-    const res = await getOnetoOneMessages(
-      user.address,
-      receiverAddress as unknown as string
-    );
-    setMessages(res);
+  const handleMenuItemClick = async () => {
+    if (user) {
+      const res = await getOnetoOneMessages(
+        user?.address,
+        receiverAddress as unknown as string
+      );
+
+      setMessages(res as unknown as IMessage[]);
+    }
   };
 
   // useEffect(() => {
@@ -126,7 +129,10 @@ const index = () => {
             <div className="w-full px-5 flex flex-col justify-between">
               <div className="flex flex-col mt-5">
                 {messages?.map((message) => (
-                  <RightBubble message={message?.message} date={user.createdAt}/>
+                  <RightBubble
+                    message={message?.message}
+                    date={(user as IUser).createdAt as Date}
+                  />
                 ))}
               </div>
             </div>

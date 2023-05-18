@@ -5,9 +5,9 @@ type Bubble = { message: string, date: Date };
 const formatDate = (isoDate: Date) => {
   const date = new Date(isoDate);
 
-  const formattedDate = date.toLocaleTimeString(date)
+  const formatter = new Intl.DateTimeFormat('en-US');
 
-  return formattedDate;
+  return formatter.format(date);;
 }
 
 export const RightBubble = ({ message, date }: Bubble) => {

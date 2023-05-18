@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextApiRequest } from 'next';
 
 export const parseCookies = (req: NextApiRequest) => {

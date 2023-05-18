@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable unused-imports/no-unused-imports */
+// @ts-nocheck
 import {
   ReactNode,
   createContext,
@@ -12,35 +13,41 @@ import { useApiStore, useAuthStore } from "./use-api";
 import { useRouter } from "next/router";
 import { ROUTES } from "../utils/api.util";
 import Cookies from "js-cookie";
+import { IInitialState, IUser } from "../utils/app.interface";
 
-const initialState = {
+const initialState: IInitialState = {
   account: "",
   error: "",
-  handleWalletConnection: (username: string) => {},
+  handleWalletConnection: (_username: string) => {},
   handleLogout: () => {},
   sendMessages: (
-    userId: string,
-    senderAddress: string,
-    receiverAddress: string,
-    message: string
+    _userId: string,
+    _senderAddress: string,
+    _receiverAddress: string,
+    _message: string
   ) => {},
-  getUserDetails: () => {},
-  getOnetoOneMessages: (address: string, receiverAddress: string) => {},
-  handleReceiverAddress: (address: string) => {},
-  getReceiverAddress: () => {},
+  getUserDetails: () => {
+    return {} as IUser;
+  },
+  getOnetoOneMessages: (_address: string, _receiverAddress: string) => {},
+  handleReceiverAddress: (_address: string) => {},
+  getReceiverAddress: () => {
+    return "";
+  },
   isAuthenticated: false,
 };
 
 const { ethereum } =
   typeof window !== "undefined"
     ? window
-    : ({ ethereum: undefined } as Window & { ethereum?: any });
+    : ({ ethereum: undefined } as typeof window & { ethereum?: any });
 
+if (typeof window !== "undefined") {
+  console.log(window);
+}
 export const AppContext = createContext(initialState);
 
 export const useAppStore = () => useContext(AppContext);
-
-
 
 const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const [account, setAccount] = useState("");
@@ -60,17 +67,16 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
       // logout();
       return;
     }
-  
+
     const expires = new Date(token.expires);
-    console.log('expires:', expires);
+    console.log("expires:", expires);
     if (expires < new Date()) {
       // token has expired, clear cookie and log out user
       Cookies.remove("token");
       // logout();
     }
   };
-  checkTokenExpired()
- 
+  checkTokenExpired();
 
   const checkEtherumExists = () => {
     if (!ethereum) {
@@ -137,7 +143,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     if (typeof window !== "undefined") {
       const item = JSON?.parse(localStorage.getItem("user") as string);
 
-      return item;
+      return item as IUser;
     }
   };
 
@@ -216,15 +222,14 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    const isTokenPresent = Cookies.get('token');
-    console.log('isTokenPresent:', isTokenPresent);
-    console.log('router.pathname:', router.pathname);
+    const isTokenPresent = Cookies.get("token");
+    console.log("isTokenPresent:", isTokenPresent);
+    console.log("router.pathname:", router.pathname);
 
-    if(!isTokenPresent && router.pathname === "/chats") {
-      router.push("/sign-up/")
+    if (!isTokenPresent && router.pathname === "/chats") {
+      router.push("/sign-up/");
     }
-
-  })
+  });
 
   return (
     <AppContext.Provider value={storeContext}>{children}</AppContext.Provider>

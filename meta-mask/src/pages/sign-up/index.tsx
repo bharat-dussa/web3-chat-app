@@ -3,7 +3,6 @@ import { useAppStore } from "../../store/app-store";
 import { Button, Input } from "antd";
 import { useRouter } from "next/router";
 import { ROUTES } from "../../utils/api.util";
-import { parseCookies } from "../../helpers";
 
 const index = () => {
   const { handleWalletConnection } = useAppStore();
@@ -66,18 +65,3 @@ const index = () => {
 };
 
 export default index;
-
-index.getInitialProps = async ({ req, res }) => {
-  const data = parseCookies(req)
-
-if (res) {
-    if (Object.keys(data).length === 0 && data.constructor === Object) {
-      res.writeHead(301, { Location: "/" })
-      res.end()
-    }
-  }
-
-  return {
-    data: data && data,
-  }
-}

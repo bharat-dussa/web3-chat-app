@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { create } from "zustand";
 import Cookies from "js-cookie";
+import { IUser } from "../utils/app.interface";
 
 type ApiState = {
   isLoading: boolean;
@@ -26,7 +27,7 @@ export const useApiStore = create<ApiState & ApiActions>((set) => ({
     set({ isLoading: true });
     try {
       const response: AxiosResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`);
-      set({ data: response.data });
+      set({ data: response.data as IUser});
 
       return response.data;
     } catch (error) {

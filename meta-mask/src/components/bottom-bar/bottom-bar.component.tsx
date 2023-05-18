@@ -13,7 +13,12 @@ export const BottomBar = () => {
     const receiverAddress = getReceiverAddress();
 
     if (message !== "") {
-      sendMessages(user._id, user.address, receiverAddress, message);
+      sendMessages(
+        user?._id as string,
+        user?.address,
+        receiverAddress,
+        message
+      );
 
       setMessage("");
     } else {
