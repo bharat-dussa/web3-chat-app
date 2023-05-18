@@ -14,9 +14,9 @@ router.post("/login", async (req, res) => {
       const isAddressMatched = address === user.address;
 
       if (isAddressMatched) {
-        res.status(200).json({
+        return res.status(200).json({
           address: address,
-          user: user
+          user: user,
         });
       }
     } else {
@@ -27,10 +27,11 @@ router.post("/login", async (req, res) => {
 
       const result = await newUser.save();
 
-      res.status(200).json({
+      return res.status(200).json({
         result: result,
       });
     }
+
     if (channelDetails.length > 0) {
       const channelId = channelDetails[0]._id;
 
@@ -38,13 +39,13 @@ router.post("/login", async (req, res) => {
         channelId: channelId,
       });
 
-      res.status(200).json({ messages: messages });
+      return res.status(200).json({ messages: messages });
     } else {
-      res.status(200).json({ messages: [] });
+      return res.status(200).json({ messages: [] });
     }
   } catch (error) {
-    res.status(400).json({ error });
     console.error(error);
+    return res.status(400).json({ error });
   }
 });
 
