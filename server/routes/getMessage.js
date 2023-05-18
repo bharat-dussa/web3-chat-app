@@ -28,6 +28,7 @@ router.get("/get-message/:channelRef", async (req, res) => {
       const messages = await Message.find({
         channelId: channelId,
       });
+      console.log('messages:', messages);
 
       res.status(200).json({ messages: messages });
     } else {

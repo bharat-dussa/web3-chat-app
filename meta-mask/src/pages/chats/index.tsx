@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Button, Layout, Menu, MenuProps, theme } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { RightBubble } from "../../elements/chat-bubble.element";
@@ -9,19 +9,18 @@ import { BottomBar } from "../../components/bottom-bar/bottom-bar.component";
 const { Header, Content, Sider } = Layout;
 
 const index = () => {
+  const [user, setUser] = useState();
+  console.log('user:', user);
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const {
-    getUserDetails,
-    getReceiverAddress,
-    getOnetoOneMessages,
-  } = useAppStore();
+  const { getUserDetails, getReceiverAddress, getOnetoOneMessages } =
+    useAppStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messages, setMessages] = useState([]);
-  const user = getUserDetails();
   const { handleLogout } = useAppStore();
   const receiverAddress = getReceiverAddress();
 
@@ -52,6 +51,12 @@ const index = () => {
   //     router.push(ROUTES.HOME);
   //   }
   // }, [r]);
+
+  useEffect(() => {
+    const userDetails = getUserDetails();
+
+    setUser(userDetails);
+  }, []);
 
   return (
     <Layout hasSider>
@@ -121,10 +126,8 @@ const index = () => {
             <div className="w-full px-5 flex flex-col justify-between">
               <div className="flex flex-col mt-5">
                 {messages?.map((message) => (
-                  <RightBubble message={message?.message} />
+                  <RightBubble message={message?.message} date={user.createdAt}/>
                 ))}
-
-                {/* <LeftBubble /> */}
               </div>
             </div>
           </div>

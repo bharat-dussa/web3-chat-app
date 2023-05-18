@@ -12,7 +12,6 @@ import { useApiStore, useAuthStore } from "./use-api";
 import { useRouter } from "next/router";
 import { ROUTES } from "../utils/api.util";
 import Cookies from "js-cookie";
-import useWebSocket from "react-use-websocket";
 
 const initialState = {
   account: "",
@@ -71,11 +70,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   checkTokenExpired()
-  useWebSocket("ws://127.0.0.1:3002", {
-    onOpen: () => {
-      console.log("WebSocket connection established.");
-    },
-  });
+ 
 
   const checkEtherumExists = () => {
     if (!ethereum) {

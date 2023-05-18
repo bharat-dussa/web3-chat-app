@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json())
-const uri = "mongodb://localhost:27017/meta-chat";
+const uri = "mongodb+srv://chat-app:chat-app@cluster0.asdufxv.mongodb.net/?retryWrites=true&w=majority";
 
 app.use("/", (req,res, next) => {
     console.log('req:', req.body);

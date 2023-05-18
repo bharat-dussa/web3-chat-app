@@ -1,11 +1,21 @@
 import React from "react";
 
-type Bubble = { message: string };
-export const RightBubble = ({ message }: Bubble) => {
+type Bubble = { message: string, date: Date };
+
+const formatDate = (isoDate: Date) => {
+  const date = new Date(isoDate);
+
+  const formattedDate = date.toLocaleTimeString(date)
+
+  return formattedDate;
+}
+
+export const RightBubble = ({ message, date }: Bubble) => {
   return (
     <div className="flex justify-end mb-4">
-      <div className="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
+      <div className="text-left mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
         {message}
+        <p className="text-[0.6rem] bg-stone-800 p-1 rounded-full	mt-1">{formatDate(date)}</p>
       </div>
     </div>
   );
