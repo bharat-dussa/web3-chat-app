@@ -43,9 +43,6 @@ const { ethereum } =
     ? window
     : ({ ethereum: undefined } as typeof window & { ethereum?: any });
 
-if (typeof window !== "undefined") {
-  console.log(window);
-}
 export const AppContext = createContext(initialState);
 
 export const useAppStore = () => useContext(AppContext);
@@ -53,7 +50,7 @@ export const useAppStore = () => useContext(AppContext);
 const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const [account, setAccount] = useState("");
   const [error, setError] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState();
 
   const router = useRouter();
 
@@ -113,6 +110,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
             setToken(accounts[0]);
 
             setIsAuthenticated(true);
+            localStorage.setItem("isAuthenticated", true);
             router.push(ROUTES.CHATS);
           } catch (error) {
             setError(error?.message);
@@ -169,6 +167,7 @@ const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     try {
       Cookies.remove("token", { path: "/" });
       localStorage.removeItem("receiverAddress");
+      localStorage.removeItem("isAuthenticated");
       router.replace(ROUTES.HOME);
     } catch (err) {
       console.log("err:", err);

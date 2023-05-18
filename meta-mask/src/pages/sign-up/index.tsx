@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppStore } from "../../store/app-store";
 import { Button, Input } from "antd";
 import { useRouter } from "next/router";
@@ -9,6 +9,21 @@ const index = () => {
   const [username, setUsername] = useState("");
   const router = useRouter();
 
+
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isAuthenticated = localStorage.getItem("isAuthenticated");
+      console.log("isAuthenticated:", isAuthenticated);
+
+      if(isAuthenticated) {
+        router.push(ROUTES.CHATS);
+      }
+
+      
+    }
+  }, []);
+  
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
