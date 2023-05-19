@@ -16,7 +16,7 @@ const index = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const { getUserDetails, getReceiverAddress, getOnetoOneMessages } =
+  const { getReceiverAddress, getOnetoOneMessages } =
     useAppStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
