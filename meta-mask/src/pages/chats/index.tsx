@@ -56,9 +56,12 @@ const index = () => {
   // }, [r]);
 
   useEffect(() => {
-    const userDetails = getUserDetails();
+    if (typeof window !== "undefined") {
+      // Perform localStorage action
+      const item = JSON.parse(localStorage.getItem("user") as string);
 
-    setUser(userDetails);
+      setUser(item);
+    }
   }, []);
 
   return (
