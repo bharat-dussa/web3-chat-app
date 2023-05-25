@@ -3,7 +3,9 @@ import React from "react";
 type Bubble = { message: string, date: Date };
 
 const formatDate = (isoDate: Date) => {
+  console.log('isoDate:', isoDate);
   const date = new Date(isoDate);
+  console.log('date:', date);
 
   const formatter = new Intl.DateTimeFormat('en-US');
 

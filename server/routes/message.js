@@ -31,6 +31,7 @@ router.post("/send-message", async (req, res) => {
         userId,
         message,
         channelId: channelDetails[0]._id,
+        date: date.now()
       });
     } else {
       const newChannel = await Channel.create({

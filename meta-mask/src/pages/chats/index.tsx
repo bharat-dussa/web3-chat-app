@@ -134,7 +134,7 @@ const index = () => {
                 {messages?.map((message) => (
                   <RightBubble
                     message={message?.message}
-                    date={(user as IUser).createdAt as Date}
+                    date={(message).date || (message).createdAt as Date}
                   />
                 ))}
               </div>
